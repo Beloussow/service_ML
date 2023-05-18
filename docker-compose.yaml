@@ -1,0 +1,28 @@
+version: "3.3"
+
+services:
+  serviceml:
+    container_name: serviceML
+    build: serviceML/
+    restart: always
+    expose:
+      - 5000
+
+    volumes:
+      - /home/tor/Рабочий стол/service_ML/serviceML/models/:/usr/src/serviceML/models/
+
+    command: gunicorn --bind 0.0.0.0:5000 --workers=2 wsgi:app_api
+
+  nginx:
+    container_name: nginx
+    restart: always
+    build: nginx/
+    ports:
+      - 5080:5080
+    depends_on:
+      - serviceml
+
+
+# Docker Compose — это средство для определения и запуска приложений Docker с несколькими контейнерами.
+#  При работе в Compose вы используете файл YAML для настройки служб приложения.
+# Затем вы создаете и запускаете все службы из конфигурации путем выполнения одной команды.
